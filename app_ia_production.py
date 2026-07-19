@@ -18,3 +18,17 @@ class DocumentIntelligenceEngine:
             
         # ... Reste du code inchangé ...
       
+from ipv6_guard import RAGNetworkGuardrail
+
+# Au sein de votre route ou fonction d'extraction Web RAG :
+def extraire_contenu_web_rag(url_cible: str):
+    # Interception de sécurité immédiate avant émission du moindre paquet réseau
+    if not RAGNetworkGuardrail.is_safe_url(url_cible):
+        return {
+            "success": False, 
+            "error": "NETWORK_VIOLATION", 
+            "message": "Accès refusé : L'adresse IP ciblée fait partie d'un segment réseau privé."
+        }
+        
+    # ... Poursuite sécurisée de la requête HTTP vers le Web Public ...
+    
