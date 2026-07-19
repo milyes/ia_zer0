@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetSecurePro IA v9 — Console d'Administration</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --border: #334155;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .console-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+        h1 {
+            color: var(--accent);
+            font-size: 24px;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+        textarea {
+            width: 100%;
+            height: 160px;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-main);
+            padding: 12px;
+            font-size: 14px;
+            font-family: monospace;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        button {
+            background-color: var(--accent);
+            color: var(--bg-main);
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s ease;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .response-section {
+            display: none;
+            margin-top: 24px;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .badge-secure {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        .badge-alert {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        .summary-box {
+            background-color: var(--bg-main);
+            border-left: 4px solid var(--accent);
+            padding: 16px;
+            border-radius: 0 6px 6px 0;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .summary-box.alert-mode {
+            border-left-color: var(--danger);
+        }
+        pre {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 0;
+        }
+        code {
+            font-family: monospace;
+            font-size: 13px;
+            color: #a7f3d0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="console-container">
+    <header>
+        <h1>⚡ IA_ZER0.09 : NetSecurePro IA v9</h1>
+        <p class="subtitle">Console Souveraine de Validation et Traitement Documentaire (NANS Core)</p>
+    </header>
+
+    <main>
+        <div class="input-group">
+            <label for="documentInput">Flux Texte du Document (OCR / RAG Entry)</label>
+            <textarea id="documentInput" placeholder="Collez le texte brut à analyser (Ex: Facture #9832. Destinataire: finance@entreprise.com. Montant TVA comprise: 1500€)..."></textarea>
+        </div>
+
+        <button id="submitBtn" onclick="traiterFluxDocument()">Exécuter l'Inférence et l'Audit Cyber</button>
+
+        <section id="responseSection" class="response-section">
+            <div id="statusBadge" class="badge"></div>
+            
+            <label>Rapport d'Analyse Sécurisé</label>
+            <div id="summaryBox" class="summary-box"></div>
+
+            <label>Payload JSON Brut (Échange API)</label>
+            <pre><code id="jsonOutput"></code></pre>
+        </section>
+    </main>
+</div>
+
+<script>
+async function traiterFluxDocument() {
+    const textInput = document.getElementById("documentInput").value;
+    const responseSection = document.getElementById("responseSection");
+    const statusBadge = document.getElementById("statusBadge");
+    const summaryBox = document.getElementById("summaryBox");
+    const jsonOutput = document.getElementById("jsonOutput");
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (!textInput.trim()) {
+        alert("Erreur : Le champ d'analyse documentaire ne peut pas être vide.");
+        return;
+    }
+
+    // Gestion de l'état de chargement de l'UI
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Calcul de l'Inférence en cours...";
+
+    try {
+        // Transmission au point d'accès natif du serveur monolithique Python
+        const response = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify({ text: textInput })
+        });
+
+        const data = await response.json();
+
+        // Rendu graphique des résultats
+        responseSection.style.display = "block";
+        jsonOutput.textContent = JSON.stringify(data, null, 2);
+
+        if (data.success) {
+            statusBadge.className = "badge badge-secure";
+            statusBadge.textContent = `✓ ACCÈS ACCORDÉ | Type: ${data.document_type} | Session: ${data.session_id}`;
+            summaryBox.className = "summary-box";
+            summaryBox.textContent = data.summary;
+        } else {
+            statusBadge.className = "badge badge-alert";
+            statusBadge.textContent = `⚠️ VIOLATION DE SÉCURITÉ INTERCEPTÉE — INTERDIT`;
+            summaryBox.className = "summary-box alert-mode";
+            summaryBox.textContent = data.summary;
+        }
+
+    } catch (error) {
+        alert("Échec critique de la communication avec le serveur IA_ZER0 local.");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Exécuter l'Analyse et l'Audit Cyber";
+    }
+}
+</script>
+
+</body>
+</html>
