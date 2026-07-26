@@ -1,0 +1,7 @@
+{
+    "timestamp": "2026-07-20T13:25:38.685884",
+    "document_type": "Diagnostic Multimodal du Noyau v10",
+    "event_type": "SSRF_IPv6_Interception",
+    "payload_preview": "http://[::ffff:127.0.0.1]/v1/metadata",
+    "security_status": "BLOQUÉE & SÉCURISÉE"
+}

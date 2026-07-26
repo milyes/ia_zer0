@@ -1,3 +1,9 @@
+#!/bin/bash
+mkdir -p ia_zer0
+cd ia_zer0
+
+# 1. INDEX.HTML - Z-CORE v9.2 AVEC NANS INTEGRÉ
+cat > index.html << 'EOH'
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,3 +53,25 @@ update();
 </script>
 </body>
 </html>
+EOH
+
+# 2. README.md - DOCTRINE
+cat > README.md << 'EOR'
+# Z-CORE v9.2 NANS SYSTEM
+`MODE: SUPER_ZERO_LOCAL` - 100% Air-Gap
+
+## Spécifications
+- **State Machine**: Classe locale sans XState
+- **Noyau NANS**: `LocalNeuralCore` JS pur
+- **Sécurité**: `MAXIMUM_ISOLATION`, `zeroCloudDependency: true`
+- **Dépendances**: 0. Fonctionne offline
+
+## Utilisation
+Ouvrir `index.html` dans navigateur. 0 build, 0 serveur.
+
+## Preuve d'exécution
+Voir screenshot: 0ms latency, 0 appel externe.
+EOR
+
+echo "Dossier ia_zer0 cree avec index.html et README.md"
+echo "Prochaine etape: git push vers https://github.com/milyes/ia_zer0"
